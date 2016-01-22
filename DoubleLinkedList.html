@@ -1,0 +1,81 @@
+<html>
+  <head>
+    <title>DLL</title>
+  <body>
+    <script>
+	  var node = {
+		data: '',
+		next: null,
+		previous: null
+	  }
+	  function DoubleLinkedList() {
+	    this.head = null;
+	  }
+	  //Push
+	  DoubleLinkedList.prototype.push = function(val){	   
+	    var node = {
+		  data: val,
+		  next: null,
+		  previous: null
+		}
+		current = this.head;
+		if(!this.head){		
+		  node.next = current;
+		  node.previous = current;
+		  this.head = node;
+		}
+		else{		  
+		  while(current.next) {
+		    current = current.next;
+		  }
+		  node.next = null;
+		  node.previous = current;
+		  current.next = node;
+		}
+	  }
+	  //Reverse
+	  DoubleLinkedList.prototype.reverse = function(dll){	
+	    var current = dll.head, temp;
+		while(current){
+		  temp = current.next;
+		  current.next = current.previous;
+		  current.previous = temp;
+		  if(!temp)
+		    dll.head = current;
+		  current = temp;
+		}
+	    return dll;
+	  }
+	  //Delete a node
+	  DoubleLinkedList.prototype.delete = function(dll, val){
+	    var current = dll.head;
+		var previous = null;
+		if(current.data == val){
+		  dll.head = current.next;
+		  if(dll.head)
+		    dll.head.previous = null;
+		  return dll;
+		}
+		while(current.next){
+		  if(current.data == val) {
+		    previous.next = current.next;
+			current.next.previous = previous;
+			return dll;
+		  }
+		  previous = current;
+		  current = current.next;
+		}	
+		if(current.data == val) {
+		  previous.next = null;
+		}
+		return dll;
+	  }
+	  var dll = new DoubleLinkedList();
+	  dll.push(1);
+	  dll.push(2);
+	  dll.push(3);	
+	  //console.log(dll.reverse(dll));
+	  console.log(dll.delete(dll,1));
+	</script>
+  </body>
+</html>

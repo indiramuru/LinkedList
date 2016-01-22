@@ -1,0 +1,87 @@
+<html>
+  <head>
+    <title>Reverse SLL</title>
+  <body>
+    <script>
+	  function SingleLinkedList() {
+	    this.head = null;
+	  }
+	  SingleLinkedList.prototype.push = function(val){
+	    var node = {
+		  value: val,
+		  next: null
+		}
+		if(!this.head){
+		  this.head = node;
+		}
+		else{
+		  current = this.head;
+		  while(current.next) {
+		    current = current.next;
+		  }
+		  current.next = node;
+		}
+	  }
+	  SingleLinkedList.prototype.remove = function(val){
+	    var current = this.head;
+		if(current.value === val)
+		  this.head = current.next;
+		else {
+		  var previous = current;
+		  while(current.next) {		    
+		    if(current.value === val) {			  
+			  previous.next = current.next;
+			  break;
+			}	
+			previous = current;
+		    current = current.next;		
+		  }
+		  if(current.value === val)
+		    previous.next = null;
+		}
+	  }
+	  //Iterative
+	  SingleLinkedList.prototype.reverseIterative = function(sll){
+	    if(!sll.head || !sll.head.next) return sll;
+		var current = sll.head;
+		var nodes = [];
+		while(current) {
+		  nodes.push(current);
+		  current = current.next;
+		}
+		var reverseLL = new SingleLinkedList();
+		var node = nodes.pop();
+        reverseLL.head = node;
+		current = reverseLL.head;		
+		while(node) {		  
+		  node.next = null;	
+          current.next = node;	
+          current = current.next;		  
+		  node = nodes.pop();
+		}
+		return reverseLL;
+	  }
+	  //Recursive
+	  SingleLinkedList.prototype.reverseRecursive = function(sll){
+	    var reverseLL = new SingleLinkedList();	    	
+		(function helperFunction(node, prev) {		
+			if (node.next) {       
+			  helperFunction(node.next, node);
+			}
+			node.next = prev;			 
+			reverseLL.push(node.value);
+		})(sll.head, null);
+		return reverseLL;
+	  }		
+	  
+	  var sll = new SingleLinkedList();
+	  sll.push(1);
+	  sll.push(2);
+	  sll.push(3);
+	  //execute below lines individually otherwise one impacts the other
+	  //console.log(sll); //works fine
+      //console.log(sll.reverseIterative(sll)); //works fine
+	  console.log(sll.reverseRecursive(sll)); // works fine  
+	</script>
+  </body>
+</html>

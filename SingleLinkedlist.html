@@ -1,0 +1,123 @@
+<html>
+  <head>
+    <title>SLL</title>
+  <body>
+    <script>
+	  function SingleLinkedList() {
+	    this.head = null;
+	  }
+	  SingleLinkedList.prototype.push = function(val){
+	    var node = {
+		  value: val,
+		  next: null
+		}
+		if(!this.head){
+		  this.head = node;
+		}
+		else{
+		  current = this.head;
+		  while(current.next) {
+		    current = current.next;
+		  }
+		  current.next = node;
+		}
+	  }
+	  SingleLinkedList.prototype.remove = function(val){
+	    var current = this.head;
+		if(current.value === val)
+		  this.head = current.next;
+		else {
+		  var previous = current;
+		  while(current.next) {		    
+		    if(current.value === val) {			  
+			  previous.next = current.next;
+			  break;
+			}	
+			previous = current;
+		    current = current.next;		
+		  }
+		  if(current.value === val)
+		    previous.next = null;
+		}
+	  }
+	  SingleLinkedList.prototype.kthFromEnd = function(k){
+	    var sll = this;
+		var node = sll.head,
+		i = 1,
+		kthNode;
+		//handle, 0 or negative value of k
+		if(k<=0) return;
+		while(node){
+		  if(i == k) 
+		    kthNode = sll.head;
+		  else if(i-k>0){
+		    kthNode = kthNode.next;
+		  }
+		  i++;
+		  node = node.next;
+		}
+		return kthNode;
+	  }
+	  SingleLinkedList.prototype.detectLoop = function(){	    
+		var sll = this;
+	    var slowPointer = sll.head, fastPointer = sll.head;
+		while(slowPointer && fastPointer && fastPointer.next) {
+		  slowPointer = slowPointer.next;
+		  fastPointer = fastPointer.next.next;
+		  if(slowPointer == fastPointer)
+		    return true;
+		}
+		return false;
+	  }
+	  SingleLinkedList.prototype.findStartOfLoop = function(){	
+	    var sll = this;
+		var slow = sll.head, fast = sll.head;
+		while(slow && fast) {
+		  slow = slow.next;
+		  if(!fast.next) return null;
+		  fast = fast.next.next;
+		  if(slow == fast) {
+		    slow = sll.head;
+			while(slow != fast) {
+			  slow = slow.next;
+			  fast = fast.next;
+			}
+			return slow;
+		  }
+		}
+	  }
+	  SingleLinkedList.prototype.removeLoop = function(startLoop){	
+	    var sll = this;
+		var current = sll.head;
+		while(current != startLoop) {
+		  current = current.next;
+		}
+		while(current.next != startLoop) {
+		  current = current.next;
+		}
+        current.next = null;
+        return sll;		
+	  }
+	  var sll = new SingleLinkedList();
+	  sll.push(1);
+	  sll.push(2);
+	  sll.push(3);
+	  sll.push(4);
+	  sll.push(5);
+      //console.log(sll.kthFromEnd(2));	 
+      console.log(sll.detectLoop());	//false  
+	  sll.head.next.next.next.next.next = sll.head.next.next; //set loop
+	  //console.log(sll);
+	  var isLoop = sll.detectLoop();
+	  console.log(isLoop); //true
+	  
+	  if(isLoop) {
+	    var startLoop = sll.findStartOfLoop();
+		console.log(startLoop);
+		sll.removeLoop(startLoop); //remove loop
+		var isLoop = sll.detectLoop();
+	    console.log(isLoop); //false
+	  }
+	</script>
+  </body>
+</html>
